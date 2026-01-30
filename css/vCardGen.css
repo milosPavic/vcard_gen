@@ -1,0 +1,447 @@
+@charset "UTF-8";
+body {
+  margin: 0;
+  padding: 2px 10px;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+@media only screen and (max-width: 630px) {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.vCardGen {
+  /* Style the tab */
+  /* Style the tab content */
+}
+.vCardGen input::placeholder,
+.vCardGen textarea::placeholder {
+  color: transparent;
+}
+.vCardGen h1 {
+  font-size: 1.2em;
+  margin: 8px 0 8px 0;
+}
+.vCardGen h2 {
+  font-size: 1.1em;
+  margin: 8px 0 8px 0;
+}
+.vCardGen h3 {
+  font-size: 1em;
+  margin: 8px 0 8px 0;
+}
+.vCardGen .vCardGen_left_align {
+  width: 100%;
+  text-align: left;
+}
+.vCardGen .vCardGen_tip {
+  font-weight: bold;
+}
+@media only screen and (max-width: 630px) {
+  .vCardGen h1 {
+    font-size: 1.2em;
+    margin: 6px 0 6px 0;
+  }
+  .vCardGen h2 {
+    font-size: 1.1em;
+    margin: 6px 0 6px 0;
+  }
+  .vCardGen h3 {
+    font-size: 1em;
+    margin: 6px 0 6px 0;
+  }
+  .vCardGen input::placeholder,
+  .vCardGen textarea::placeholder {
+    color: unset;
+  }
+}
+.vCardGen_tab_nav {
+  width: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+  z-index: 99;
+}
+.vCardGen_tab_nav_tab {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin: 0 1px 0 0;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+  border-left: solid 1px #ccc;
+  border-top: solid 1px #ccc;
+  border-right: solid 1px #ccc;
+  color: #000000;
+  /* Create an active/current tablink class */
+}
+.vCardGen_tab_nav_tab.active {
+  background-color: #68B8E5;
+  color: #FFFFFF;
+}
+.vCardGen_tab_nav_tab:hover {
+  background-color: #4fa5dc;
+  color: #FFFFFF;
+}
+.vCardGen_container {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  padding: 10px;
+}
+@media only screen and (max-width: 630px) {
+  .vCardGen_container {
+    flex-direction: column;
+    align-items: unset;
+    padding: 0;
+  }
+}
+.vCardGen_container_tab_stack {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1px;
+}
+.vCardGen_container_tab_stack_tab_content {
+  box-sizing: border-box;
+  width: 100%;
+  visibility: hidden;
+  height: 0;
+  padding: 6px 12px;
+  border-top: none;
+}
+.vCardGen_container_tab_stack_tab_content.active {
+  visibility: visible;
+  height: unset;
+}
+.vCardGen_hide_mob {
+  display: none;
+}
+.vCardGen .accordion {
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: white;
+}
+.vCardGen .accordion .accordion-header {
+  width: 100%;
+  background-color: #f8f9fa;
+  border: none;
+  padding: 14px 16px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #404654;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+.vCardGen .accordion .accordion-header i:first-child {
+  margin-right: 8px;
+  color: #68B8E5;
+}
+.vCardGen .accordion .accordion-header .accordion-icon {
+  transition: transform 0.3s ease;
+  color: #68B8E5;
+}
+.vCardGen .accordion .accordion-header:hover {
+  background-color: rgba(104, 184, 229, 0.1);
+}
+.vCardGen .accordion .accordion-header.active {
+  background-color: rgba(104, 184, 229, 0.15);
+  color: #4fa5dc;
+}
+.vCardGen .accordion .accordion-header.active .accordion-icon {
+  transform: rotate(180deg);
+}
+.vCardGen .accordion .accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0 16px;
+}
+.vCardGen .accordion .accordion-content.active {
+  padding: 16px;
+}
+.vCardGen_form {
+  width: auto;
+  padding-right: 20px;
+}
+.vCardGen_form label {
+  display: inline-block;
+  width: 120px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+@media only screen and (max-width: 825px) {
+  .vCardGen_form label {
+    display: block;
+    width: unset;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+  }
+}
+@media only screen and (max-width: 630px) {
+  .vCardGen_form .label_mob {
+    display: none !important;
+  }
+}
+.vCardGen_form .label_note_mobile {
+  display: none;
+}
+@media only screen and (max-width: 825px) {
+  .vCardGen_form .label_note_mobile {
+    display: unset;
+  }
+}
+.vCardGen_form .label_note {
+  margin-right: 5px;
+}
+@media only screen and (max-width: 825px) {
+  .vCardGen_form .label_note {
+    display: none;
+  }
+}
+.vCardGen_form .box {
+  display: flex;
+  flex-direction: row;
+}
+.vCardGen_form .input_hover, .vCardGen_form textarea:not(:placeholder-shown), .vCardGen_form select:not(:placeholder-shown), .vCardGen_form input:not(:placeholder-shown), .vCardGen_form textarea.filled, .vCardGen_form select.filled, .vCardGen_form input.filled, .vCardGen_form .input-container:hover input, .vCardGen_form .input-container:hover textarea, .vCardGen_form .input-container:hover select, .vCardGen_form .input-container:active input, .vCardGen_form .input-container:active textarea, .vCardGen_form .input-container:active select {
+  background-color: rgba(104, 184, 229, 0.05);
+  color: #404654;
+  border: solid 1px #404654;
+}
+.vCardGen_form .input-container {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 280px;
+}
+.vCardGen_form .input-container.search::before {
+  content: "🔍";
+}
+.vCardGen_form .input-container.vCardGen_fname::before {
+  content: "\f007";
+}
+.vCardGen_form .input-container.vCardGen_lname::before {
+  content: "\f0c0";
+}
+.vCardGen_form .input-container.vCardGen_phone::before {
+  content: "\f095";
+}
+.vCardGen_form .input-container.vCardGen_mobile::before {
+  content: "\f3cd";
+}
+.vCardGen_form .input-container.vCardGen_email::before {
+  content: "\f0e0";
+}
+.vCardGen_form .input-container.vCardGen_web::before {
+  content: "\f57d";
+}
+.vCardGen_form .input-container.vCardGen_web1::before {
+  content: "\f57d";
+}
+.vCardGen_form .input-container.vCardGen_web2::before {
+  content: "\f7a2";
+}
+.vCardGen_form .input-container.vCardGen_web3::before {
+  content: "\f57c";
+}
+.vCardGen_form .input-container.vCardGen_company::before {
+  content: "\f1ad";
+}
+.vCardGen_form .input-container.vCardGen_title::before {
+  content: "\f508";
+}
+.vCardGen_form .input-container.vCardGen_address::before {
+  content: "\f3c5";
+}
+.vCardGen_form .input-container.vCardGen_city::before {
+  content: "\f64f";
+}
+.vCardGen_form .input-container.vCardGen_state::before {
+  content: "\f3ed";
+}
+.vCardGen_form .input-container.vCardGen_country::before {
+  content: "\f024";
+}
+.vCardGen_form .input-container.vCardGen_zip::before {
+  content: "#";
+}
+.vCardGen_form .input-container.vCardGen_notes::before {
+  content: "\f328";
+}
+.vCardGen_form .input-container.vCardGen_error::before {
+  content: "\f188";
+}
+.vCardGen_form .input-container.vCardGen_validation::before {
+  content: "\f00c";
+}
+.vCardGen_form .input-container:before {
+  position: absolute;
+  left: 6px;
+  top: 25%;
+  transform: translateY(-25%);
+  font-size: 16px; /* Adjust size */
+  font-family: FontAwesome;
+  color: #68B8E5;
+}
+.vCardGen_form .input-container:hover:before, .vCardGen_form .input-container:active:before {
+  color: white;
+  color: #404654;
+}
+.vCardGen_form textarea, .vCardGen_form select, .vCardGen_form input {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 100%;
+  max-width: 280px;
+  padding: 8px 8px 8px 30px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+@media only screen and (max-width: 630px) {
+  .vCardGen_form textarea, .vCardGen_form select, .vCardGen_form input {
+    margin-bottom: 4px;
+  }
+}
+.vCardGen_form textarea:invalid, .vCardGen_form select:invalid, .vCardGen_form input:invalid {
+  border: 1px solid #FF0000;
+}
+.vCardGen_form textarea {
+  resize: vertical;
+  height: 100px;
+}
+.vCardGen_qrCode_box {
+  width: auto;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+@media only screen and (max-width: 630px) {
+  .vCardGen_qrCode_box {
+    padding: 0 12px;
+    text-align: unset;
+    display: inline-block;
+  }
+  .vCardGen_qrCode_box .qrcode-svg-box, .vCardGen_qrCode_box .qrcode-vcard-box {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+  }
+}
+.vCardGen_qrCode_box canvas {
+  max-width: 100%;
+  width: 256px;
+  height: 256px;
+}
+.vCardGen_qrCode_box .vCardGen_parent {
+  box-sizing: border-box;
+  display: inline-block;
+  width: auto;
+  border: solid 1px #000000;
+  margin: 4px;
+  padding: 0;
+  width: 304px;
+  height: 304px;
+}
+.vCardGen_qrCode_box .vCardGen_parent #vCardGen_qrcode_vcard {
+  box-sizing: border-box;
+  width: 300px;
+  height: 300px;
+  background-color: rgba(104, 184, 229, 0.1);
+  background-size: 57.5px 57.5px;
+  border: solid 22.5px white;
+}
+.vCardGen_qrCode_box .vCardGen_parent #vCardGen_qrcode_svg {
+  box-sizing: border-box;
+  width: 300px;
+  height: 300px;
+  background-color: rgba(104, 184, 229, 0.1);
+  background-size: 57.5px 57.5px;
+  border: solid 22px white;
+}
+.vCardGen_qrCode_box .vCardGen_parent #vCardGen_qrcode_svg_dots {
+  position: relative;
+  box-sizing: border-box;
+  width: 299px;
+  height: 299px;
+  background-color: rgba(104, 184, 229, 0.1);
+  background-size: 57.5px 57.5px;
+  border: solid 22px white;
+  padding: 1px 0 0 1px;
+}
+.vCardGen_qrCode_box .vCardGen_parent #vCardGen_qrcode_svg_dots svg {
+  position: absolute;
+  left: -20px;
+  top: -20px;
+}
+.vCardGen .vCardGen_actions {
+  visibility: hidden;
+}
+.vCardGen .vCardGen_actions.active {
+  visibility: unset;
+}
+.vCardGen .button-container {
+  display: flex;
+  justify-content: left;
+  gap: 10px;
+}
+@media only screen and (max-width: 630px) {
+  .vCardGen .button-container {
+    margin: 10px 0 0 0;
+  }
+}
+.vCardGen .button-container button {
+  position: relative;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  background-color: #68B8E5;
+  color: white;
+  border-radius: 4px;
+}
+@media only screen and (max-width: 630px) {
+  .vCardGen .button-container button {
+    padding: 8px 12px;
+  }
+}
+.vCardGen .button-container button:after {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  visibility: hidden;
+  content: "\f111";
+  color: #ff0000;
+  z-index: 99;
+  font-family: FontAwesome;
+  font-size: 6px;
+}
+.vCardGen .button-container button:hover {
+  background-color: #4fa5dc;
+}
+.vCardGen .button-container button:hover:after {
+  visibility: visible;
+}
+
+/*# sourceMappingURL=vCardGen.css.map */
