@@ -444,4 +444,88 @@ body {
   visibility: visible;
 }
 
+.data_result table {
+  font-size: 12px;
+  width: 100%;
+  border-collapse: collapse;
+}
+.data_result table th,
+.data_result table td {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+.data_result table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-size: 11px;
+}
+.data_result table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+.data_result .table-wrapper {
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.data_result .btn-test-row {
+  padding: 4px 8px;
+  font-size: 11px;
+  white-space: nowrap;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.data_result .btn-test-row:hover {
+  background-color: #0056b3;
+}
+.data_result .btn-test-row:active {
+  background-color: #004085;
+}
+@media (max-width: 768px) {
+  .data_result table {
+    font-size: 10px;
+  }
+  .data_result table th,
+  .data_result table td {
+    padding: 2px 4px;
+    max-width: 100px;
+  }
+  .data_result .btn-test-row {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+}
+@media (max-width: 480px) {
+  .data_result table {
+    font-size: 9px;
+  }
+  .data_result table th,
+  .data_result table td {
+    padding: 2px 3px;
+    max-width: 80px;
+  }
+}
+.data_result .compact-table {
+  font-size: 11px;
+}
+.data_result .compact-table th,
+.data_result .compact-table td {
+  padding: 3px 6px;
+  font-size: 11px;
+}
+.data_result .compact-table th {
+  font-size: 10px;
+}
+
 /*# sourceMappingURL=vCardGen.css.map */

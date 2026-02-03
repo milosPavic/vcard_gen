@@ -131,17 +131,15 @@
                 </div>
             </div>
             <div id="import" class="vCardGen_container_tab_stack_tab_content active">
-                <h2>Import csv from Excel files</h2>
-                <form id="frmImport" >
-                    <label for="importFile">Select Excel or CSV File:</label>
-                    <input type="file" id="importFile" accept=".xlsx, .xls, .csv" />
+                <h2>Import data from Excel files</h2>
+                <form id="form_excel" method="POST" enctype="multipart/form-data">
+                    <input id="fi_excel_file" type="file" name="excel_file" accept=".xlsx, .xls" required>
+                    <button type="submit">Upload and Preview</button>
                 </form>
                 <hr>
                 <div class=""><button id="btn_download_all">Download All</button></div>
                 <h3>Data result</h3>
-                <div class="data_result">
-
-                </div>
+                <div class="data_result "></div>
             </div>
         </div>
         <div class="vCardGen_qrCode_box">
@@ -164,36 +162,176 @@
 <script src="./js/vCardGen-page-blue.js"></script>
 <script src="./js/vCardGen-qr-library.js"></script>
 <script src="./js/vCardGen-qr-code-styling.js"></script>
-<script>
-    // Accordion functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const accordionHeaders = document.querySelectorAll('.accordion-header');
 
-        accordionHeaders.forEach(header => {
-            header.addEventListener('click', function() {
-                const content = this.nextElementSibling;
-                const isActive = this.classList.contains('active');
-
-                // Toggle active state
-                this.classList.toggle('active');
-                content.classList.toggle('active');
-
-                // Animate the content
-                if (!isActive) {
-                    content.style.maxHeight = content.scrollHeight + 'px';
-                } else {
-                    content.style.maxHeight = '0px';
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        // Excel form submit
+        const formExcel = document.getElementById('form_excel');
+        if (formExcel) {
+            let file=document.querySelector('#fi_excel_file');
+                file.addEventListener('change', function(){
+                const fileName = this.files[0]?.name || '';
+                if(fileName.length>0){
+                    const allowedExtensions = /(\.xlsx|\.xls)$/i;
+                    if(!allowedExtensions.exec(fileName)){
+                        alert('Please upload file having extensions .xlsx or .xls only.');
+                        this.value = '';
+                        return false;
+                    }
+                    //this.form.submit();
                 }
-            });
-        });
+                });
 
-        // Set initial max-height for default open accordion
+        formExcel.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const resultContainer = document.querySelector('.data_result');
+
+        resultContainer.innerHTML = '<p>Loading...</p>';
+
+        fetch('php/ajax.php?operator=import_excel', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(response => {
+        if (response.ok) {
+        // Mapping Excel headers to form field IDs
+        const headerMapping = {
+        'First Name': 'vc_firstName',
+        'Last Name': 'vc_lastName',
+        'Work Phone': 'vc_work_phone',
+        'Mobile': 'vc_mobile_number',
+        'Home': 'vc_home_number',
+        'Email': 'vc_email',
+        'Title': 'vc_title',
+        'Web1': 'vc_web1',
+        'Web2': 'vc_web2',
+        'Web3': 'vc_web3',
+        'Company': 'vc_company',
+        'Notes': 'vc_notes',
+        'Address': 'vc_address',
+        'City': 'vc_city',
+        'State': 'vc_state',
+        'Zip': 'vc_zipcode',
+        'Country': 'vc_country'
+    };
+
+        // Build table
+        let tableHTML = '<div class="table-wrapper"><table><thead><tr><th>Action</th><th>#</th>';
+
+        response.data.headers.forEach(header => {
+        tableHTML += `<th>${header}</th>`;
+    });
+
+        tableHTML += '</tr></thead><tbody>';
+
+        response.data.rows.forEach((row, index) => {
+        tableHTML += `<tr>`;
+        tableHTML += `<td><button class="btn-test-row" data-row-index="${index}">Test</button></td>`;
+        tableHTML += `<td>${index + 1}</td>`;
+
+        response.data.headers.forEach(header => {
+        let cellValue = row[header];
+
+        if (cellValue === null || cellValue === undefined) {
+        cellValue = '';
+    }
+
+        const formattedValue = String(cellValue).replace(/\n/g, '<br>');
+        const fieldId = headerMapping[header] || '';
+
+        tableHTML += `<td data-field="${fieldId}" data-value="${String(cellValue).replace(/"/g, '&quot;')}">${formattedValue}</td>`;
+    });
+
+        tableHTML += '</tr>';
+    });
+
+        tableHTML += '</tbody></table></div>';
+        tableHTML += `<p>Total rows: ${response.data.total}</p>`;
+
+        resultContainer.innerHTML = tableHTML;
+
+        // Attach event listeners to "Test Data" buttons
+        document.querySelectorAll('.btn-test-row').forEach(button => {
+        button.addEventListener('click', function() {
+        const rowIndex = this.getAttribute('data-row-index');
+        const row = this.closest('tr');
+        const cells = row.querySelectorAll('td[data-field]');
+
+        // Switch to vCard tab
+        const vCardTab = document.querySelector('[data-tab="vCard"]');
+        if (vCardTab) {
+        vCardTab.click();
+    }
+
+        // Fill form with data
+        cells.forEach(cell => {
+        const fieldId = cell.getAttribute('data-field');
+        const value = cell.getAttribute('data-value');
+
+        if (fieldId) {
+        const formField = document.getElementById(fieldId);
+        if (formField) {
+        formField.value = value;
+    }
+    }
+    });
+
+        // Scroll to form
+        document.querySelector('.vCardGen').scrollIntoView({ behavior: 'smooth' });
+    });
+    });
+
+    } else {
+        let errorHTML = `<p style="color: red;">Error: ${response.message}</p>`;
+
+        if (response.data.details) {
+        errorHTML += `<p>${response.data.details}</p>`;
+    }
+
+        if (response.data.trace) {
+        errorHTML += '<details><summary>Stack trace</summary><pre>' +
+        JSON.stringify(response.data.trace, null, 2) +
+        '</pre></details>';
+    }
+
+        resultContainer.innerHTML = errorHTML;
+    }
+    })
+        .catch(error => {
+        resultContainer.innerHTML = `<p style="color: red;">Network error: ${error.message}</p>`;
+        console.error('Error:', error);
+    });
+    });
+    }
+
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+        const content = this.nextElementSibling;
+        const isActive = this.classList.contains('active');
+
+        this.classList.toggle('active');
+        content.classList.toggle('active');
+
+        if (!isActive) {
+        content.style.maxHeight = content.scrollHeight + 'px';
+    } else {
+        content.style.maxHeight = '0px';
+    }
+    });
+    });
+
         const activeContent = document.querySelector('.accordion-content.active');
         if (activeContent) {
-            activeContent.style.maxHeight = activeContent.scrollHeight + 'px';
-        }
+        activeContent.style.maxHeight = activeContent.scrollHeight + 'px';
+    }
     });
 </script>
+
 
 </body>
 </html>
