@@ -23,6 +23,7 @@
                     <h2>vCard</h2>
                     <form class="vCardGen_form" id="form_vCard">
 
+                        <!-- Accordion 1: You -->
                         <div class="accordion">
                             <button type="button" class="accordion-header active">
                                 <i class="fa-solid fa-user"></i> You
@@ -47,6 +48,7 @@
                             </div>
                         </div>
 
+                        <!-- Accordion 2: Your Organization -->
                         <div class="accordion">
                             <button type="button" class="accordion-header">
                                 <i class="fa-solid fa-building"></i> Your Organization
@@ -70,6 +72,7 @@
                             </div>
                         </div>
 
+                        <!-- Accordion 3: Your Location -->
                         <div class="accordion">
                             <button type="button" class="accordion-header">
                                 <i class="fa-solid fa-location-dot"></i> Your Location
@@ -161,8 +164,8 @@
 <script src="./js/vCardGen-qr-library.js"></script>
 <script src="./js/vCardGen-qr-code-styling.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
         // Excel form submit
         const formExcel = document.getElementById('form_excel');
         if (formExcel) {
@@ -176,13 +179,14 @@
                         this.value = '';
                         return false;
                     }
+                    //this.form.submit();
                 }
             });
 
             document.getElementById('btn_download_all').addEventListener('click', async function() {
                 const rows = document.querySelectorAll('.data_result tbody tr');
                 if (rows.length === 0) {
-                    alert('No data to download. Please upload Excel first.');
+                    alert('Nema podataka za preuzimanje. Prvo učitajte Excel.');
                     return;
                 }
 
@@ -193,27 +197,28 @@
                 btn.disabled = true;
                 btn.innerText = 'Generating ZIP...';
 
-                // Process all result rows from Excel
+                // Prolazimo kroz sve redove rezultata iz Excela
                 for (let i = 0; i < rows.length; i++) {
                     const row = rows[i];
                     const testBtn = row.querySelector('.btn-test-row');
 
                     if (testBtn) {
-                        // 1. Simulate click on "Test" button in the table
-                        // This fills the form and triggers your production generateQRCode() function
+                        // 1. Simuliramo klik na tvoj "Test" taster u tabeli
+                        // Ovo puni formu i pokreće TVOJU produkcionu generateQRCode() funkciju
                         testBtn.click();
 
-                        // 2. Wait a bit for Awesomesauce class to finish (SVG render)
+                        // 2. Čekamo malo da se tvoja Awesomesauce klasa završi (SVG render)
+                        // Pošto koristiš klijentsku klasu, moramo dati vremena pretraživaču
                         await new Promise(resolve => setTimeout(resolve, 150));
 
-                        // 3. Get SVG that the class just outputted in preview box
+                        // 3. Uzimamo SVG koji je tvoja klasa upravo izbacila u preview box
                         const svgElement = document.querySelector("#vCardGen_qrcode_svg svg");
 
                         if (svgElement) {
-                            // Get XML content of SVG
+                            // Uzimamo XML sadržaj SVG-a
                             const svgData = new XMLSerializer().serializeToString(svgElement);
 
-                            // File name based on first and last name from form
+                            // Ime fajla na osnovu imena i prezimena iz forme (koju je testBtn popunio)
                             const fName = document.getElementById('vc_firstName').value || 'User';
                             const lName = document.getElementById('vc_lastName').value || i;
                             const fileName = `${i + 1}_${fName}_${lName}`.replace(/[^a-z0-9]/gi, '_')+".svg";
@@ -223,20 +228,21 @@
                     }
                 }
 
-                // 4. Create and download ZIP archive
+                // 4. Kreiranje i preuzimanje ZIP arhive
                 zip.generateAsync({type: "blob"}).then(function(content) {
                     const url = window.URL.createObjectURL(content);
                     const a = document.createElement('a');
                     a.href = url;
-
+                    //excel file name
                     let fileName = file.files[0]?.name || 'qr_codes';
+                    //a.download = "vCard_QR_Codes_Production.zip";
                     fileName=fileName.replace(/(\.xlsx|\.xls)$/i, '');
                     fileName=fileName.replace(/[^a-z0-9]/gi, '_');
                     a.download = fileName+'__QR_Codes.zip';
                     document.body.appendChild(a);
                     a.click();
 
-                    // Restore button state
+                    // Vraćanje dugmeta u prvobitno stanje
                     btn.disabled = false;
                     btn.innerText = originalText;
                     window.URL.revokeObjectURL(url);
@@ -244,154 +250,154 @@
             });
 
 
-            formExcel.addEventListener('submit', function(event) {
-                event.preventDefault();
+        formExcel.addEventListener('submit', function(event) {
+        event.preventDefault();
 
-                const formData = new FormData(this);
-                const resultContainer = document.querySelector('.data_result');
+        const formData = new FormData(this);
+        const resultContainer = document.querySelector('.data_result');
 
-                resultContainer.innerHTML = '<p>Loading...</p>';
+        resultContainer.innerHTML = '<p>Loading...</p>';
 
-                fetch('php/ajax.php?operator=import_excel', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.json())
-                    .then(response => {
-                        if (response.ok) {
-                            // Mapping Excel headers to form field IDs
-                            const headerMapping = {
-                                'First Name': 'vc_firstName',
-                                'Last Name': 'vc_lastName',
-                                'Work Phone': 'vc_work_phone',
-                                'Mobile': 'vc_mobile_number',
-                                'Home': 'vc_home_number',
-                                'Email': 'vc_email',
-                                'Title': 'vc_title',
-                                'Web1': 'vc_web1',
-                                'Web2': 'vc_web2',
-                                'Web3': 'vc_web3',
-                                'Company': 'vc_company',
-                                'Notes': 'vc_notes',
-                                'Address': 'vc_address',
-                                'City': 'vc_city',
-                                'State': 'vc_state',
-                                'Zip': 'vc_zipcode',
-                                'Country': 'vc_country'
-                            };
+        fetch('php/ajax.php?operator=import_excel', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(response => {
+        if (response.ok) {
+        // Mapping Excel headers to form field IDs
+        const headerMapping = {
+        'First Name': 'vc_firstName',
+        'Last Name': 'vc_lastName',
+        'Work Phone': 'vc_work_phone',
+        'Mobile': 'vc_mobile_number',
+        'Home': 'vc_home_number',
+        'Email': 'vc_email',
+        'Title': 'vc_title',
+        'Web1': 'vc_web1',
+        'Web2': 'vc_web2',
+        'Web3': 'vc_web3',
+        'Company': 'vc_company',
+        'Notes': 'vc_notes',
+        'Address': 'vc_address',
+        'City': 'vc_city',
+        'State': 'vc_state',
+        'Zip': 'vc_zipcode',
+        'Country': 'vc_country'
+    };
 
-                            // Build table
-                            let tableHTML = '<div class="table-wrapper"><table><thead><tr><th>Action</th><th>#</th>';
+        // Build table
+        let tableHTML = '<div class="table-wrapper"><table><thead><tr><th>Action</th><th>#</th>';
 
-                            response.data.headers.forEach(header => {
-                                tableHTML += `<th>${header}</th>`;
-                            });
+        response.data.headers.forEach(header => {
+        tableHTML += `<th>${header}</th>`;
+    });
 
-                            tableHTML += '</tr></thead><tbody>';
+        tableHTML += '</tr></thead><tbody>';
 
-                            response.data.rows.forEach((row, index) => {
-                                tableHTML += `<tr>`;
-                                tableHTML += `<td><button class="btn-test-row" data-row-index="${index}">Test</button></td>`;
-                                tableHTML += `<td>${index + 1}</td>`;
+        response.data.rows.forEach((row, index) => {
+        tableHTML += `<tr>`;
+        tableHTML += `<td><button class="btn-test-row" data-row-index="${index}">Test</button></td>`;
+        tableHTML += `<td>${index + 1}</td>`;
 
-                                response.data.headers.forEach(header => {
-                                    let cellValue = row[header];
+        response.data.headers.forEach(header => {
+        let cellValue = row[header];
 
-                                    if (cellValue === null || cellValue === undefined) {
-                                        cellValue = '';
-                                    }
+        if (cellValue === null || cellValue === undefined) {
+        cellValue = '';
+    }
 
-                                    const formattedValue = String(cellValue).replace(/\n/g, '<br>');
-                                    const fieldId = headerMapping[header] || '';
+        const formattedValue = String(cellValue).replace(/\n/g, '<br>');
+        const fieldId = headerMapping[header] || '';
 
-                                    tableHTML += `<td data-field="${fieldId}" data-value="${String(cellValue).replace(/"/g, '&quot;')}">${formattedValue}</td>`;
-                                });
+        tableHTML += `<td data-field="${fieldId}" data-value="${String(cellValue).replace(/"/g, '&quot;')}">${formattedValue}</td>`;
+    });
 
-                                tableHTML += '</tr>';
-                            });
+        tableHTML += '</tr>';
+    });
 
-                            tableHTML += '</tbody></table></div>';
-                            tableHTML += `<p>Total rows: ${response.data.total}</p>`;
+        tableHTML += '</tbody></table></div>';
+        tableHTML += `<p>Total rows: ${response.data.total}</p>`;
 
-                            resultContainer.innerHTML = tableHTML;
+        resultContainer.innerHTML = tableHTML;
 
-                            // Attach event listeners to "Test Data" buttons
-                            document.querySelectorAll('.btn-test-row').forEach(button => {
-                                button.addEventListener('click', function() {
-                                    const rowIndex = this.getAttribute('data-row-index');
-                                    const row = this.closest('tr');
-                                    const cells = row.querySelectorAll('td[data-field]');
+        // Attach event listeners to "Test Data" buttons
+        document.querySelectorAll('.btn-test-row').forEach(button => {
+            button.addEventListener('click', function() {
+            const rowIndex = this.getAttribute('data-row-index');
+            const row = this.closest('tr');
+            const cells = row.querySelectorAll('td[data-field]');
 
-                                    // Switch to vCard tab
-                                    const vCardTab = document.querySelector('[data-tab="vCard"]');
-                                    if (vCardTab) {
-                                        vCardTab.click();
-                                    }
+            // Switch to vCard tab
+            const vCardTab = document.querySelector('[data-tab="vCard"]');
+            if (vCardTab) {
+                vCardTab.click();
+            }
 
-                                    // Fill form with data
-                                    cells.forEach(cell => {
-                                        const fieldId = cell.getAttribute('data-field');
-                                        const value = cell.getAttribute('data-value');
+            // Fill form with data
+            cells.forEach(cell => {
+            const fieldId = cell.getAttribute('data-field');
+            const value = cell.getAttribute('data-value');
 
-                                        if (fieldId) {
-                                            const formField = document.getElementById(fieldId);
-                                            if (formField) {
-                                                formField.value = value;
-                                            }
-                                        }
-                                        document.querySelector('#generate-qrcode').click();
-                                    });
+            if (fieldId) {
+            const formField = document.getElementById(fieldId);
+                if (formField) {
+                    formField.value = value;
+                }
+            }
+            document.querySelector('#generate-qrcode').click();
+        });
 
-                                    // Scroll to form
-                                    document.querySelector('.vCardGen').scrollIntoView({ behavior: 'smooth' });
-                                });
-                            });
+            // Scroll to form
+            document.querySelector('.vCardGen').scrollIntoView({ behavior: 'smooth' });
+        });
+    });
 
-                        } else {
-                            let errorHTML = `<p style="color: red;">Error: ${response.message}</p>`;
+    } else {
+        let errorHTML = `<p style="color: red;">Error: ${response.message}</p>`;
 
-                            if (response.data.details) {
-                                errorHTML += `<p>${response.data.details}</p>`;
-                            }
+        if (response.data.details) {
+        errorHTML += `<p>${response.data.details}</p>`;
+    }
 
-                            if (response.data.trace) {
-                                errorHTML += '<details><summary>Stack trace</summary><pre>' +
-                                    JSON.stringify(response.data.trace, null, 2) +
-                                    '</pre></details>';
-                            }
+        if (response.data.trace) {
+        errorHTML += '<details><summary>Stack trace</summary><pre>' +
+        JSON.stringify(response.data.trace, null, 2) +
+        '</pre></details>';
+    }
 
-                            resultContainer.innerHTML = errorHTML;
-                        }
-                    })
-                    .catch(error => {
-                        resultContainer.innerHTML = `<p style="color: red;">Network error: ${error.message}</p>`;
-                        console.error('Error:', error);
-                    });
-            });
-        }
+        resultContainer.innerHTML = errorHTML;
+    }
+    })
+        .catch(error => {
+        resultContainer.innerHTML = `<p style="color: red;">Network error: ${error.message}</p>`;
+        console.error('Error:', error);
+    });
+    });
+    }
 
         // Accordion functionality
         const accordionHeaders = document.querySelectorAll('.accordion-header');
         accordionHeaders.forEach(header => {
-            header.addEventListener('click', function() {
-                const content = this.nextElementSibling;
-                const isActive = this.classList.contains('active');
+        header.addEventListener('click', function() {
+        const content = this.nextElementSibling;
+        const isActive = this.classList.contains('active');
 
-                this.classList.toggle('active');
-                content.classList.toggle('active');
+        this.classList.toggle('active');
+        content.classList.toggle('active');
 
-                if (!isActive) {
-                    content.style.maxHeight = content.scrollHeight + 'px';
-                } else {
-                    content.style.maxHeight = '0px';
-                }
-            });
-        });
+        if (!isActive) {
+        content.style.maxHeight = content.scrollHeight + 'px';
+    } else {
+        content.style.maxHeight = '0px';
+    }
+    });
+    });
 
         const activeContent = document.querySelector('.accordion-content.active');
         if (activeContent) {
-            activeContent.style.maxHeight = activeContent.scrollHeight + 'px';
-        }
+        activeContent.style.maxHeight = activeContent.scrollHeight + 'px';
+    }
     });
 </script>
 

@@ -115,6 +115,7 @@ body {
     //justify-content: space-between;
     align-items: flex-start;
     width: 100%;
+    max-width: calc(100% - 320px);
     //margin-top: 20px;
     padding: 10px;
     @media only screen and (max-width: $tablet_sm) {
@@ -496,9 +497,9 @@ body {
 }
 // Excel Import Table Styles
 .data_result {
-
+  $font_size:90%;
   table {
-    font-size: 12px;
+    font-size: $font_size;
     width: 100%;
     border-collapse: collapse;
 
@@ -518,7 +519,7 @@ body {
       position: sticky;
       top: 0;
       z-index: 1;
-      font-size: 11px;
+      font-size: $font_size;
     }
 
     tbody {
@@ -532,14 +533,15 @@ body {
 
   .table-wrapper {
     overflow-x: auto;
-    max-width: 100%;
+    width:100%;
     border: 1px solid #ddd;
     border-radius: 4px;
+    //background-color:rgba(255,0,0,0.5);
   }
 
   .btn-test-row {
     padding: 4px 8px;
-    font-size: 11px;
+    font-size: $font_size;
     white-space: nowrap;
     background-color: #007bff;
     color: white;

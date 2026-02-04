@@ -97,6 +97,7 @@ body {
   display: flex;
   align-items: flex-start;
   width: 100%;
+  max-width: calc(100% - 320px);
   padding: 10px;
 }
 @media only screen and (max-width: 630px) {
@@ -445,7 +446,7 @@ body {
 }
 
 .data_result table {
-  font-size: 12px;
+  font-size: 90%;
   width: 100%;
   border-collapse: collapse;
 }
@@ -464,20 +465,20 @@ body {
   position: sticky;
   top: 0;
   z-index: 1;
-  font-size: 11px;
+  font-size: 90%;
 }
 .data_result table tbody tr:hover {
   background-color: #f9f9f9;
 }
 .data_result .table-wrapper {
   overflow-x: auto;
-  max-width: 100%;
+  width: 100%;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 .data_result .btn-test-row {
   padding: 4px 8px;
-  font-size: 11px;
+  font-size: 90%;
   white-space: nowrap;
   background-color: #007bff;
   color: white;

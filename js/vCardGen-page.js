@@ -599,6 +599,6 @@ document.addEventListener('DOMContentLoaded',
             activeContent.style.maxHeight = activeContent.scrollHeight + 'px';
         }
 
-
+        window.generateQRCode = generateQRCode;
     });
 //end window.onload
